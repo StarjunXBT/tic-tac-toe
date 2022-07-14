@@ -6,7 +6,6 @@ const Game = (function () {
   const _CPUMark = "O";
   const _first_Turn = ["Player", "CPU"][Math.round(Math.random())];
   let _turn = _first_Turn;
-  let _replay = "/";
   const _turnDisplay = document.querySelector("#player");
 
   const _pos = [
@@ -27,7 +26,6 @@ const Game = (function () {
     const replay = prompt("What's your replay?");
 
     if (replay.toLowerCase() === "no") {
-      _replay === "N";
       document.querySelector(".board").remove();
     }
 
