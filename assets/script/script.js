@@ -21,6 +21,19 @@ const Game = (function () {
   // Set first turn
   _turnDisplay.textContent = _first_Turn;
 
+  // Check if there is a winner
+  const _winner = (mark, player) => {
+    const isMarked = (currentValue) =>
+      document.querySelectorAll(".cases")[currentValue].textContent === mark;
+
+    _pos.map((cases) => {
+      if (cases.every(isMarked)) {
+        alert(`${player} has won`);
+        _wantToReplay();
+      }
+    });
+  };
+
   // Play a round
   const _round = (mark, next, e) => {
     const curr = _turn;
@@ -69,19 +82,6 @@ const Game = (function () {
       document.querySelector(".board").remove();
       createBoard();
     }
-  };
-
-  // Check if there is a winner
-  const _winner = (mark, player) => {
-    const isMarked = (currentValue) =>
-      document.querySelectorAll(".cases")[currentValue].textContent === mark;
-
-    _pos.map((cases) => {
-      if (cases.every(isMarked)) {
-        alert(`${player} has won`);
-        _wantToReplay();
-      }
-    });
   };
 
   return {
