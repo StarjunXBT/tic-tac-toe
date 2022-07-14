@@ -22,20 +22,24 @@ const Game = (function () {
   // Set first turn
   _turnDisplay.textContent = _first_Turn;
 
+
+  // Ask user if he want to play again
   const _wantToReplay = () => {
     let replay = prompt("What's your replay?");
-
-    if (replay.toLowerCase() == "yes") {
-      document.querySelector(".board").remove();
-      createBoard();
-    }
 
     if (replay.toLowerCase() === "no") {
       _replay === "N";
       document.querySelector(".board").remove();
     }
+
+    if (replay.toLowerCase() == "yes") {
+      document.querySelector(".board").remove();
+      createBoard();
+    }
   };
 
+
+  // Check if there is a winner
   const _winner = (mark, player) => {
     if (_replay === "N") return;
 
@@ -50,6 +54,8 @@ const Game = (function () {
     });
   };
 
+
+  // Play a round
   const _round = (mark, next, e) => {
     if (_replay === "N") return;
 
