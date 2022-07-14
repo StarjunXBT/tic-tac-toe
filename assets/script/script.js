@@ -1,5 +1,5 @@
 const Game = (function () {
-  "use strict";
+  ("use strict");
 
   const _main = document.querySelector("main");
   const _PlayerMark = "X";
@@ -20,6 +20,33 @@ const Game = (function () {
 
   // Set first turn
   _turnDisplay.textContent = _first_Turn;
+
+  // Add event on board cases
+  const _addEvent = (element) => {
+    element.addEventListener("click", (e) => {
+      if (
+        e.target.textContent === _PlayerMark ||
+        e.target.textContent === _CPUMark
+      )
+        return;
+
+      _turn === "CPU" ? _round("O", "Player", e) : _round("X", "CPU", e);
+    });
+  };
+
+  // Create board and cases
+  const createBoard = () => {
+    const board = document.createElement("div");
+    board.classList.add("board");
+
+    for (let i = 0; i < 9; i++) {
+      const cases = document.createElement("div");
+      cases.classList.add("cases");
+      _addEvent(cases);
+      board.appendChild(cases);
+    }
+    _main.appendChild(board);
+  };
 
   // Ask user if he want to play again
   const _wantToReplay = () => {
@@ -55,28 +82,6 @@ const Game = (function () {
     _turnDisplay.textContent = next;
     e.target.textContent = mark;
     _winner(mark, curr);
-  };
-  // Add event on board cases
-  const _addEvent = (element) => {
-    element.addEventListener("click", (e) => {
-      if (e.target.textContent === _PlayerMark || e.target.textContent === _CPUMark) return;
-
-      _turn === "CPU" ? _round("O", "Player", e) : _round("X", "CPU", e);
-    });
-  };
-
-  // Create board and cases
-  const createBoard = () => {
-    const board = document.createElement("div");
-    board.classList.add("board");
-
-    for (let i = 0; i < 9; i++) {
-      const cases = document.createElement("div");
-      cases.classList.add("cases");
-      _addEvent(cases);
-      board.appendChild(cases);
-    }
-    _main.appendChild(board);
   };
 
   return {
