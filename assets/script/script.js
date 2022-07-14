@@ -59,7 +59,7 @@ const Game = (function () {
   // Add event on board cases
   const _addEvent = (element) => {
     element.addEventListener("click", (e) => {
-      if (e.target.textContent === "X" || e.target.textContent === "O") return;
+      if (e.target.textContent === _PlayerMark || e.target.textContent === _CPUMark) return;
 
       _turn === "CPU" ? _round("O", "Player", e) : _round("X", "CPU", e);
     });
