@@ -21,6 +21,15 @@ const Game = (function () {
   // Set first turn
   _turnDisplay.textContent = _first_Turn;
 
+  // Play a round
+  const _round = (mark, next, e) => {
+    const curr = _turn;
+    _turn = next;
+    _turnDisplay.textContent = next;
+    e.target.textContent = mark;
+    _winner(mark, curr);
+  };
+
   // Add event on board cases
   const _addEvent = (element) => {
     element.addEventListener("click", (e) => {
@@ -73,15 +82,6 @@ const Game = (function () {
         _wantToReplay();
       }
     });
-  };
-
-  // Play a round
-  const _round = (mark, next, e) => {
-    const curr = _turn;
-    _turn = next;
-    _turnDisplay.textContent = next;
-    e.target.textContent = mark;
-    _winner(mark, curr);
   };
 
   return {
