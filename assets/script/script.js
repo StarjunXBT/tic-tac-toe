@@ -1,6 +1,4 @@
 const Game = (function () {
-  ("use strict");
-
   const _main = document.querySelector("main");
   const _PlayerMark = "X";
   const _CPUMark = "O";
@@ -20,6 +18,20 @@ const Game = (function () {
 
   // Set first turn
   _turnDisplay.textContent = _first_Turn;
+
+  // Create board and cases
+  const createBoard = () => {
+    const board = document.createElement("div");
+    board.classList.add("board");
+
+    for (let i = 0; i < 9; i++) {
+      const cases = document.createElement("div");
+      cases.classList.add("cases");
+      _addEvent(cases);
+      board.appendChild(cases);
+    }
+    _main.appendChild(board);
+  };
 
   // Ask user if he want to play again
   const _wantToReplay = () => {
@@ -68,20 +80,6 @@ const Game = (function () {
 
       _turn === "CPU" ? _round("O", "Player", e) : _round("X", "CPU", e);
     });
-  };
-
-  // Create board and cases
-  const createBoard = () => {
-    const board = document.createElement("div");
-    board.classList.add("board");
-
-    for (let i = 0; i < 9; i++) {
-      const cases = document.createElement("div");
-      cases.classList.add("cases");
-      _addEvent(cases);
-      board.appendChild(cases);
-    }
-    _main.appendChild(board);
   };
 
   return {
