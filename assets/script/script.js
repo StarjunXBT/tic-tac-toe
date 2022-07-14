@@ -1,84 +1,91 @@
-const game = (player, board, turnMsg) => {
-  this.board = board;
-  this.player = player;
-  this.playerMark = "X";
-  this.cpuMark = "O";
+const Game = (function () {
+  "use strict";
 
-  this.replay = "/";
-  this.playerTurn = turnMsg;
-  this.turn = [this.player, "CPU"][Math.round(Math.random())];
-  this.playerTurn.textContent = this.turn;
+  const _main = document.querySelector("main");
+  const _PlayerMark = "X";
+  const _CPUMark = "O";
+  const _first_Turn = ["Player", "CPU"][Math.round(Math.random())];
+  let _turn;
+  let _replay;
+  const _turnDisplay = document.querySelector("#player");
 
-  this.pos = [
+  const _pos = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
-    [2, 4, 6],
     [0, 3, 6],
     [1, 4, 7],
     [2, 5, 8],
+    [2, 4, 7],
   ];
 
-  const deleteBoard = () => {
-    this.board.remove();
-  };
+  // Set first turn
+  _turnDisplay.textContent = _first_Turn;
 
-  const wantToReplay = () => {
-    let sign = prompt("Want to replay? Type Yes or No");
+  const _wantToReplay = () => {
+    let replay = prompt("What's your replay?");
 
-    if (sign.toLowerCase() == "no") this.board.remove();
-
-    if (sign.toLowerCase() == "yes") {
-      this.board.replaceChildren();
+    if (replay.toLowerCase() == "yes") {
+      document.querySelector(".board").remove();
       createBoard();
+    }
+
+    if (replay.toLowerCase() === "no") {
+      _replay === "N";
+      document.querySelector(".board").remove();
     }
   };
 
-  const checkWin = (mark) => {
-    console.log(document.querySelectorAll(".cases"));
+  const _winner = (mark, player) => {
+    if (_replay === "N") return;
 
-    const marked = (currentValue) =>
+    const isMarked = (currentValue) =>
       document.querySelectorAll(".cases")[currentValue].textContent === mark;
-    this.pos.forEach((cases) => {
-      if (cases.every(marked)) {
-        alert(`${turn} is the winner`);
-        wantToReplay();
+
+    _pos.map((cases) => {
+      if (cases.every(isMarked)) {
+        alert(`${player} has won`);
+        _wantToReplay();
       }
     });
   };
 
-  const Round = (e, mark, turn) => {
-    e.target.textContent = mark;
-    checkWin(mark);
-    this.turn = turn;
-    this.playerTurn.textContent = this.turn;
-  };
+  const _round = (mark, next, e) => {
+    if (_replay === "N") return;
 
-  const addEvent = (element) => {
+    const curr = _turn;
+    _turn = next;
+    _turnDisplay.textContent = next;
+    e.target.textContent = mark;
+    _winner(mark, curr);
+  };
+  // Add event on board cases
+  const _addEvent = (element) => {
     element.addEventListener("click", (e) => {
+      if (_replay === "N") return;
       if (e.target.textContent === "X" || e.target.textContent === "O") return;
 
-      this.turn === this.player
-        ? Round(e, this.playerMark, "CPU")
-        : Round(e, this.cpuMark, this.player);
+      _turn === "CPU" ? _round("O", "Player", e) : _round("X", "CPU", e);
     });
   };
 
+  // Create board and cases
   const createBoard = () => {
+    const board = document.createElement("div");
+    board.classList.add("board");
+
     for (let i = 0; i < 9; i++) {
       const cases = document.createElement("div");
       cases.classList.add("cases");
-      addEvent(cases);
-      this.board.appendChild(cases);
+      _addEvent(cases);
+      board.appendChild(cases);
     }
+    _main.appendChild(board);
   };
 
-  return { createBoard };
-};
+  return {
+    createBoard,
+  };
+})();
 
-const Game = game(
-  "lol",
-  document.querySelector(".board"),
-  document.querySelector("#player")
-);
 Game.createBoard();
