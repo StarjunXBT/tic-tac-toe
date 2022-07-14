@@ -49,6 +49,8 @@ const Game = (function () {
 
   // Check if there is a winner
   const _winner = (mark, player) => {
+
+    // Check if every cases is marked
     const isMarked = (currentValue) =>
       document.querySelectorAll(".cases")[currentValue].textContent === mark;
 
