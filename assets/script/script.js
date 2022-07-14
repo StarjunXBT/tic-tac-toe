@@ -5,8 +5,8 @@ const Game = (function () {
   const _PlayerMark = "X";
   const _CPUMark = "O";
   const _first_Turn = ["Player", "CPU"][Math.round(Math.random())];
-  let _turn;
-  let _replay;
+  let _turn = _first_Turn;
+  let _replay = "/";
   const _turnDisplay = document.querySelector("#player");
 
   const _pos = [
@@ -22,22 +22,20 @@ const Game = (function () {
   // Set first turn
   _turnDisplay.textContent = _first_Turn;
 
-
   // Ask user if he want to play again
   const _wantToReplay = () => {
-    let replay = prompt("What's your replay?");
+    const replay = prompt("What's your replay?");
 
     if (replay.toLowerCase() === "no") {
       _replay === "N";
       document.querySelector(".board").remove();
     }
 
-    if (replay.toLowerCase() == "yes") {
+    if (replay.toLowerCase() === "yes") {
       document.querySelector(".board").remove();
       createBoard();
     }
   };
-
 
   // Check if there is a winner
   const _winner = (mark, player) => {
@@ -53,7 +51,6 @@ const Game = (function () {
       }
     });
   };
-
 
   // Play a round
   const _round = (mark, next, e) => {
