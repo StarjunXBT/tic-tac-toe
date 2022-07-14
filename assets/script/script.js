@@ -37,8 +37,6 @@ const Game = (function () {
 
   // Check if there is a winner
   const _winner = (mark, player) => {
-    if (_replay === "N") return;
-
     const isMarked = (currentValue) =>
       document.querySelectorAll(".cases")[currentValue].textContent === mark;
 
@@ -52,8 +50,6 @@ const Game = (function () {
 
   // Play a round
   const _round = (mark, next, e) => {
-    if (_replay === "N") return;
-
     const curr = _turn;
     _turn = next;
     _turnDisplay.textContent = next;
@@ -63,7 +59,6 @@ const Game = (function () {
   // Add event on board cases
   const _addEvent = (element) => {
     element.addEventListener("click", (e) => {
-      if (_replay === "N") return;
       if (e.target.textContent === "X" || e.target.textContent === "O") return;
 
       _turn === "CPU" ? _round("O", "Player", e) : _round("X", "CPU", e);
