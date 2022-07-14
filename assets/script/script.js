@@ -7,11 +7,46 @@ const game = (player, board, turnMsg) => {
   this.playerTurn = turnMsg;
   this.turn = [this.player, "CPU"][Math.round(Math.random())];
   this.playerTurn.textContent = this.turn;
-  
+
+  this.pos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [2, 4, 6],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+  ];
+
+  const deleteBoard = () => {
+    this.board.remove();
+  };
+
+  const wantToReplay = () => {
+    let sign = prompt("Want to replay? Type yes or not");
+
+    if (sign.toLowerCase() == "no") deleteBoard();
+
+    if (sign.toLowerCase() == "yes") {
+      this.board.replaceChildren();
+      createBoard();
+    }
+  };
+
+  const checkWin = (mark, player) => {
+    const marked = (currentValue) =>
+      document.querySelectorAll(".cases")[currentValue].textContent === mark;
+    this.pos.forEach((cases) => {
+      if (cases.every(marked)) {
+        alert(`${turn} is the winner`);
+        wantToReplay();
+      }
+    });
+  };
 
   const Round = (e, mark, turn) => {
-    checkWin();
     e.target.textContent = mark;
+    checkWin(mark, turn);
     this.turn = turn;
     this.playerTurn.textContent = this.turn;
   };
