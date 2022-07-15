@@ -1,9 +1,6 @@
 const Game = (function () {
-  const _main = document.querySelector("main");
-  const _PlayerMark = "X";
-  const _CPUMark = "O";
-  const _first_Turn = ["Player", "CPU"][Math.round(Math.random())];
-  let _turn = _first_Turn;
+  let _board = Array(9);
+  let _turn;
   const _turnDisplay = document.querySelector("#player");
 
   const _pos = [
@@ -16,77 +13,81 @@ const Game = (function () {
     [2, 4, 7],
   ];
 
-  // Set first turn
-  _turnDisplay.textContent = _first_Turn;
-
-  // Create board and cases
-  const createBoard = () => {
-    const board = document.createElement("div");
-    board.classList.add("board");
+  const _createBoard = () => {
+    const _board = document.createElement("div");
+    _board.classList.add("board");
 
     for (let i = 0; i < 9; i++) {
       const cases = document.createElement("div");
       cases.classList.add("cases");
-      _addEvent(cases);
-      board.appendChild(cases);
+      _board.appendChild(cases);
     }
-    _main.appendChild(board);
+    document.querySelector("main").appendChild(_board);
   };
 
-  // Ask user if he want to play again
-  const _wantToReplay = () => {
-    const replay = prompt("What's your replay?");
+  const replay = () => {};
 
-    if (replay.toLowerCase() === "no") {
-      document.querySelector(".board").remove();
-    }
-
-    if (replay.toLowerCase() === "yes") {
-      document.querySelector(".board").remove();
-      createBoard();
-    }
+  const endGame = () => {
+    document.querySelector(".board").remove();
   };
 
-  // Check if there is a winner
-  const _winner = (mark, player) => {
-
-    // Check if every cases is marked
-    const isMarked = (currentValue) =>
-      document.querySelectorAll(".cases")[currentValue].textContent === mark;
+  changeTurn = () => {
+    _turn.getName === _P1.getName ? (_turn = _P2) : (_turn = _P1);
+    _turnDisplay.textContent = _turn.getName();
+  };
+  const checkWin = (mark) => {
+    const isMarked = (currentValue) => _board[currentValue] === mark;
 
     _pos.map((cases) => {
       if (cases.every(isMarked)) {
-        alert(`${player} has won`);
-        _wantToReplay();
+        alert(`${_turn.getName()}`);
+        endGame();
       }
     });
   };
+  const _round = (e) => {
+    const curr = _turn.getSign();
 
-  // Play a round
-  const _round = (mark, next, e) => {
-    const curr = _turn;
-    _turn = next;
-    _turnDisplay.textContent = next;
-    e.target.textContent = mark;
-    _winner(mark, curr);
+    if (e.target.textContent !== "") return;
+
+    const i = Array.from(e.target.parentNode.childNodes).indexOf(e.target);
+    _turn.makeMove(e, i, _board);
+
+    checkWin(curr);
+
+    changeTurn();
   };
 
-  // Add event on board cases
-  const _addEvent = (element) => {
-    element.addEventListener("click", (e) => {
-      if (
-        e.target.textContent === _PlayerMark ||
-        e.target.textContent === _CPUMark
-      )
-        return;
-
-      _turn === "CPU" ? _round("O", "Player", e) : _round("X", "CPU", e);
-    });
+  const _addEvent = () => {
+    const cases = document.querySelectorAll(".board > *");
+    cases.forEach((casee) => casee.addEventListener("click", _round));
   };
 
-  return {
-    createBoard,
+  const _Player = (name, sign) => {
+    const getSign = () => sign;
+    const getName = () => name;
+    const makeMove = (e, i, arr) => {
+      e.target.textContent = sign;
+      arr[i] = sign;
+    };
+    return { makeMove, getName, getSign };
   };
+
+  const _P1 = _Player("P1", "X");
+  const _P2 = _Player("P2", "O");
+
+  const _Players = [_P1, _P2];
+  const _firstMove = _Players[Math.floor(Math.random() * 2)];
+
+  _turn = _firstMove;
+  _turnDisplay.textContent = _turn.getName();
+
+  const Play = () => {
+    _createBoard();
+    _addEvent();
+  };
+
+  return { Play };
 })();
 
-Game.createBoard();
+Game.Play();
